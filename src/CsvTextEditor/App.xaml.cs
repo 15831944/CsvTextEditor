@@ -7,16 +7,15 @@
 
 namespace CsvTextEditor
 {
-    using System;
     using System.Diagnostics;
     using System.Windows;
     using Catel.ApiCop;
     using Catel.ApiCop.Listeners;
     using Catel.IoC;
     using Catel.Logging;
+    using Orc.Squirrel;
     using Orchestra.Services;
     using Orchestra.Views;
-    using Orc.Squirrel;
 
     /// <summary>
     ///     Interaction logic for App.xaml

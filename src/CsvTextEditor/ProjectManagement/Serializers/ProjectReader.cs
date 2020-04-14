@@ -7,11 +7,8 @@
 
 namespace CsvTextEditor.ProjectManagement
 {
-    using System.Diagnostics;
     using System.Threading.Tasks;
     using Catel;
-    using Catel.IoC;
-    using Catel.Services;
     using Models;
     using Orc.FileSystem;
     using Orc.Notifications;
@@ -50,7 +47,8 @@ namespace CsvTextEditor.ProjectManagement
 
                 return project;
 
-            } catch (System.IO.IOException ex)
+            }
+            catch (System.IO.IOException ex)
             {
                 _notificationService.ShowNotification("Could not open file", ex.Message);
             }

@@ -13,6 +13,7 @@ namespace CsvTextEditor.ProjectManagement
     using Catel.IoC;
     using Catel.Services;
     using Catel.Threading;
+    using CsvTextEditor.Providers;
     using Orc.CsvTextEditor;
     using Orc.ProjectManagement;
 
@@ -22,20 +23,23 @@ namespace CsvTextEditor.ProjectManagement
         private const int MaxLineCountWithAutoCompleteEnabled = 1000;
 
         private readonly IDispatcherService _dispatcherService;
+        private readonly ICsvTextEditorInstanceProvider _csvTextEditorProvider;
         private readonly IServiceLocator _serviceLocator;
         private ICsvTextEditorInstance _csvTextEditorInstance;
         #endregion
 
         #region Constructors
         public CsvTextEditorAutoCompleteProjectWatcher(IProjectManager projectManager, IServiceLocator serviceLocator,
-            IDispatcherService dispatcherService)
+            IDispatcherService dispatcherService, ICsvTextEditorInstanceProvider csvTextEditorProvider)
             : base(projectManager)
         {
             Argument.IsNotNull(() => serviceLocator);
             Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull(() => csvTextEditorProvider);
 
             _serviceLocator = serviceLocator;
             _dispatcherService = dispatcherService;
+            _csvTextEditorProvider = csvTextEditorProvider;
         }
         #endregion
 
@@ -51,10 +55,7 @@ namespace CsvTextEditor.ProjectManagement
                 return TaskHelper.Completed;
             }
 
-            if (_csvTextEditorInstance == null && _serviceLocator.IsTypeRegistered<ICsvTextEditorInstance>(newProject))
-            {
-                _csvTextEditorInstance = _serviceLocator.ResolveType<ICsvTextEditorInstance>(newProject);
-            }
+            _csvTextEditorInstance = _csvTextEditorProvider.GetInstance();
 
             if (_csvTextEditorInstance != null)
             {

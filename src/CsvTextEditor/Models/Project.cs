@@ -56,7 +56,7 @@ namespace CsvTextEditor.Models
                 return true;
             }
 
-            return obj.GetType() == GetType() && Equals((Project) obj);
+            return obj.GetType() == GetType() && Equals((Project)obj);
         }
 
         public override int GetHashCode()

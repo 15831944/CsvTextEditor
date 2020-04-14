@@ -7,18 +7,14 @@
 
 namespace CsvTextEditor.ViewModels
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Configuration;
-    using Catel.IoC;
     using Catel.MVVM;
     using Catel.Services;
     using Orc.Squirrel;
     using Orchestra.Services;
-    using Services;
 
     public class SettingsViewModel : ViewModelBase
     {
@@ -77,7 +73,7 @@ namespace CsvTextEditor.ViewModels
             if (await _openFileService.DetermineFileAsync())
             {
                 CustomEditor = _openFileService.FileName;
-            }       
+            }
         }
 
         public TaskCommand BackupUserData { get; private set; }

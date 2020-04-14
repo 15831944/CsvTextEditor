@@ -7,10 +7,10 @@
 
 namespace CsvTextEditor
 {
-    using Orc.Squirrel;
     using System;
     using System.Collections.Immutable;
     using System.Windows.Input;
+    using Orc.Squirrel;
     using InputGesture = Catel.Windows.Input.InputGesture;
 
     public static class Settings
@@ -96,7 +96,7 @@ namespace CsvTextEditor
 
             public const string DeleteLine = "Edit.DeleteLine";
             public static readonly InputGesture DeleteLineInputGesture = new InputGesture(Key.L, ModifierKeys.Control);
-            
+
             public const string RemoveBlankLines = "Edit.RemoveBlankLines";
             public static readonly InputGesture RemoveBlankLinesInputGesture = null;
 
@@ -110,7 +110,7 @@ namespace CsvTextEditor
 
         public static class Settings
         {
- 
+
             public const string General = "Settings.General";
             public static readonly InputGesture GeneralInputGesture = new InputGesture(Key.S, ModifierKeys.Alt | ModifierKeys.Control);
         }

@@ -7,12 +7,10 @@
 
 namespace CsvTextEditor.Services
 {
-    using System.IO;
     using System.Threading.Tasks;
     using Catel;
     using Catel.Configuration;
     using Catel.Logging;
-    using Catel.Services;
     using Orc.CommandLine;
     using Orc.FileSystem;
 
