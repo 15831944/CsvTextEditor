@@ -7,17 +7,18 @@
 
 namespace CsvTextEditor.ViewModels
 {
+    using System;
     using System.Threading.Tasks;
     using Catel;
+    using Catel.Configuration;
     using Catel.IoC;
     using Catel.MVVM;
     using Catel.Threading;
+    using CsvTextEditor.Providers;
     using Orc.CsvTextEditor;
     using Orc.ProjectManagement;
-    using Orchestra;
     using Orc.Squirrel;
-    using System;
-    using Catel.Configuration;
+    using Orchestra;
 
     public class StatusBarViewModel : ViewModelBase
     {
@@ -27,21 +28,24 @@ namespace CsvTextEditor.ViewModels
         private ICsvTextEditorInstance _csvTextEditorInstance;
         private readonly IConfigurationService _configurationService;
         private readonly IUpdateService _updateService;
+        private readonly ICsvTextEditorInstanceProvider _csvTextEditorProvider;
         #endregion
 
         #region Constructors
-        public StatusBarViewModel(IProjectManager projectManager, IServiceLocator serviceLocator, IConfigurationService configurationService,
-            IUpdateService updateService)
+        public StatusBarViewModel(IProjectManager projectManager, IServiceLocator serviceLocator, IConfigurationService configurationService, IUpdateService updateService,
+            ICsvTextEditorInstanceProvider csvTextEditorProvider)
         {
             Argument.IsNotNull(() => projectManager);
             Argument.IsNotNull(() => serviceLocator);
             Argument.IsNotNull(() => configurationService);
             Argument.IsNotNull(() => updateService);
+            Argument.IsNotNull(() => csvTextEditorProvider);
 
             _projectManager = projectManager;
             _serviceLocator = serviceLocator;
             _configurationService = configurationService;
             _updateService = updateService;
+            _csvTextEditorProvider = csvTextEditorProvider;
         }
         #endregion
 
@@ -122,9 +126,12 @@ namespace CsvTextEditor.ViewModels
                 return TaskHelper.Completed;
             }
 
-            _csvTextEditorInstance = _serviceLocator.ResolveType<ICsvTextEditorInstance>(args.NewProject);
+            _csvTextEditorInstance = _csvTextEditorProvider.GetInstance();
 
-            _csvTextEditorInstance.CaretTextLocationChanged += OnCaretTextLocationChanged;
+            if (_csvTextEditorInstance != null)
+            {
+                _csvTextEditorInstance.CaretTextLocationChanged += OnCaretTextLocationChanged;
+            }
 
             return TaskHelper.Completed;
         }

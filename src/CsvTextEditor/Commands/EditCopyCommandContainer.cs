@@ -7,15 +7,15 @@
 
 namespace CsvTextEditor
 {
-    using Catel.IoC;
     using Catel.MVVM;
+    using CsvTextEditor.Providers;
     using Orc.ProjectManagement;
 
     public class EditCopyCommandContainer : EditProjectCommandContainerBase
     {
         #region Constructors
-        public EditCopyCommandContainer(ICommandManager commandManager, IProjectManager projectManager, IServiceLocator serviceLocator)
-            : base(Commands.Edit.Copy, commandManager, projectManager, serviceLocator)
+        public EditCopyCommandContainer(ICommandManager commandManager, IProjectManager projectManager, ICsvTextEditorInstanceProvider csvTextEditorInstanceProvider)
+            : base(Commands.Edit.Copy, commandManager, projectManager, csvTextEditorInstanceProvider)
         {
         }
         #endregion

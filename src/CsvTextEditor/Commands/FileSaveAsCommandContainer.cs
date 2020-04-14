@@ -41,7 +41,7 @@ namespace CsvTextEditor
             }
 
             _saveFileService.Filter = "Text Files (*.csv)|*csv";
-            
+
             // Note: seems to work strange
             _saveFileService.AddExtension = true;
 

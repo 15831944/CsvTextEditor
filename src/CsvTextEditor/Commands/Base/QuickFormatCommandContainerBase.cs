@@ -10,8 +10,8 @@ namespace CsvTextEditor
     using System;
     using System.Diagnostics;
     using Catel;
-    using Catel.IoC;
     using Catel.MVVM;
+    using CsvTextEditor.Providers;
     using Orc.Notifications;
     using Orc.ProjectManagement;
 
@@ -25,8 +25,8 @@ namespace CsvTextEditor
 
         #region Constructors
         protected QuickFormatCommandContainerBase(string commandName, ICommandManager commandManager, IProjectManager projectManager,
-            IServiceLocator serviceLocator, INotificationService notificationService)
-            : base(commandName, commandManager, projectManager, serviceLocator)
+            INotificationService notificationService, ICsvTextEditorInstanceProvider csvTextEditorInstanceProvider)
+            : base(commandName, commandManager, projectManager, csvTextEditorInstanceProvider)
         {
             Argument.IsNotNull(() => notificationService);
 

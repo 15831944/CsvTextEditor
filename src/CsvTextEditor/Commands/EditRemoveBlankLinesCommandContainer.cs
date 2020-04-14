@@ -7,8 +7,8 @@
 
 namespace CsvTextEditor
 {
-    using Catel.IoC;
     using Catel.MVVM;
+    using CsvTextEditor.Providers;
     using Orc.CsvTextEditor.Operations;
     using Orc.Notifications;
     using Orc.ProjectManagement;
@@ -16,9 +16,9 @@ namespace CsvTextEditor
     public class EditRemoveBlankLinesCommandContainer : QuickFormatCommandContainerBase
     {
         #region Constructors
-        public EditRemoveBlankLinesCommandContainer(ICommandManager commandManager, IProjectManager projectManager, IServiceLocator serviceLocator,
-            INotificationService notificationService)
-            : base(Commands.Edit.RemoveBlankLines, commandManager, projectManager, serviceLocator, notificationService)
+        public EditRemoveBlankLinesCommandContainer(ICommandManager commandManager, IProjectManager projectManager, INotificationService notificationService,
+            ICsvTextEditorInstanceProvider csvTextEditorInstanceProvider)
+            : base(Commands.Edit.RemoveBlankLines, commandManager, projectManager, notificationService, csvTextEditorInstanceProvider)
         {
         }
 

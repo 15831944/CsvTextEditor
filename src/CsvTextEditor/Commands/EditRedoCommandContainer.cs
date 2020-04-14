@@ -7,15 +7,15 @@
 
 namespace CsvTextEditor
 {
-    using Catel.IoC;
     using Catel.MVVM;
+    using CsvTextEditor.Providers;
     using Orc.ProjectManagement;
 
     public class EditRedoCommandContainer : EditProjectCommandContainerBase
     {
         #region Constructors
-        public EditRedoCommandContainer(ICommandManager commandManager, IProjectManager projectManager, IServiceLocator serviceLocator)
-            : base(Commands.Edit.Redo, commandManager, projectManager, serviceLocator)
+        public EditRedoCommandContainer(ICommandManager commandManager, IProjectManager projectManager, ICsvTextEditorInstanceProvider csvTextEditorInstanceProvider)
+            : base(Commands.Edit.Redo, commandManager, projectManager, csvTextEditorInstanceProvider)
         {
         }
         #endregion

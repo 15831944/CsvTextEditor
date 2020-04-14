@@ -10,8 +10,8 @@ namespace CsvTextEditor
     using System;
     using System.Windows.Threading;
     using Catel;
-    using Catel.IoC;
     using Catel.MVVM;
+    using CsvTextEditor.Providers;
     using Models;
     using Orc.CsvTextEditor;
     using Orc.ProjectManagement;
@@ -19,64 +19,34 @@ namespace CsvTextEditor
     public abstract class EditProjectCommandContainerBase : ProjectCommandContainerBase
     {
         #region Fields
-        private readonly IServiceLocator _serviceLocator;
+        private readonly ICsvTextEditorInstanceProvider _csvTextEditorProvider;
         private readonly DispatcherTimer _invalidateTimer;
-
-        private ICsvTextEditorInstance _csvTextEditorInstance;
         #endregion
 
         #region Constructors
-        protected EditProjectCommandContainerBase(string commandName, ICommandManager commandManager, IProjectManager projectManager, IServiceLocator serviceLocator)
+        protected EditProjectCommandContainerBase(string commandName, ICommandManager commandManager, IProjectManager projectManager, ICsvTextEditorInstanceProvider csvTextEditorProvider)
             : base(commandName, commandManager, projectManager)
         {
-            Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull(() => csvTextEditorProvider);
 
-            _serviceLocator = serviceLocator;
-
+            _csvTextEditorProvider = csvTextEditorProvider;
             _invalidateTimer = new DispatcherTimer();
             _invalidateTimer.Interval = TimeSpan.FromMilliseconds(100);
             _invalidateTimer.Tick += OnInvalidateTimerTick;
-        }        
+        }
         #endregion
 
-        protected ICsvTextEditorInstance CsvTextEditorInstance
-        {
-            get
-            {
-                var activeProject = _projectManager.ActiveProject;
-
-                if (_csvTextEditorInstance == null && _serviceLocator.IsTypeRegistered<ICsvTextEditorInstance>(activeProject))
-                {
-                    _csvTextEditorInstance = _serviceLocator.ResolveType<ICsvTextEditorInstance>(activeProject);
-                    
-                }
-
-                return _csvTextEditorInstance;
-            }
-        }
+        protected ICsvTextEditorInstance CsvTextEditorInstance => _csvTextEditorProvider.GetInstance();
 
         protected override void ProjectActivated(Project oldProject, Project newProject)
         {
             base.ProjectActivated(oldProject, newProject);
 
-            if (_csvTextEditorInstance != null)
-            {
-                _csvTextEditorInstance.TextChanged -= CsvTextEditorInstanceOnTextChanged;
-            }
+            var csvTextEditorInstance = CsvTextEditorInstance;
 
-            if (newProject == null)
+            if (csvTextEditorInstance != null)
             {
-                return;
-            }
-
-            if (_csvTextEditorInstance == null && _serviceLocator.IsTypeRegistered<ICsvTextEditorInstance>(newProject))
-            {
-                _csvTextEditorInstance = _serviceLocator.ResolveType<ICsvTextEditorInstance>(newProject);
-            }
-
-            if (_csvTextEditorInstance != null)
-            {
-                _csvTextEditorInstance.TextChanged += CsvTextEditorInstanceOnTextChanged;
+                csvTextEditorInstance.TextChanged -= CsvTextEditorInstanceOnTextChanged;
             }
         }
 
@@ -105,7 +75,7 @@ namespace CsvTextEditor
         private void OnInvalidateTimerTick(object sender, EventArgs e)
         {
             _invalidateTimer.Stop();
-            
+
             _commandManager.InvalidateCommands();
         }
         #endregion

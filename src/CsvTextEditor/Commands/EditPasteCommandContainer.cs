@@ -8,15 +8,15 @@
 namespace CsvTextEditor
 {
     using System.Windows;
-    using Catel.IoC;
     using Catel.MVVM;
+    using CsvTextEditor.Providers;
     using Orc.ProjectManagement;
 
     public class EditPasteCommandContainer : EditProjectCommandContainerBase
     {
         #region Constructors
-        public EditPasteCommandContainer(ICommandManager commandManager, IProjectManager projectManager, IServiceLocator serviceLocator)
-            : base(Commands.Edit.Paste, commandManager, projectManager, serviceLocator)
+        public EditPasteCommandContainer(ICommandManager commandManager, IProjectManager projectManager, ICsvTextEditorInstanceProvider csvTextEditorInstanceProvider)
+            : base(Commands.Edit.Paste, commandManager, projectManager, csvTextEditorInstanceProvider)
         {
         }
         #endregion

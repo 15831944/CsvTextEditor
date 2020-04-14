@@ -9,27 +9,27 @@ namespace CsvTextEditor.ViewModels
 {
     using System;
     using Catel;
-    using Catel.IoC;
     using Catel.MVVM;
+    using CsvTextEditor.Providers;
     using Orc.CsvTextEditor;
 
     public class ProjectStatisticViewModel : ViewModelBase
     {
         #region Fields
-        private readonly IServiceLocator _serviceLocator;
-
+        private readonly ICsvTextEditorInstanceProvider _csvTextEditorProvider;
         private ICsvTextEditorInstance _csvTextEditorInstance;
         #endregion
 
         #region Constructors
-        public ProjectStatisticViewModel(IServiceLocator serviceLocator)
+        public ProjectStatisticViewModel(ICsvTextEditorInstanceProvider csvTextEditorProvider)
         {
-            Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull(() => csvTextEditorProvider);
 
-            _serviceLocator = serviceLocator;
+            _csvTextEditorProvider = csvTextEditorProvider;
 
-            _serviceLocator.TypeRegistered += OnTypeRegistered;
+            _csvTextEditorProvider.InstanceChanged += OnCsvTextEditorProviderInstanceChanged;
         }
+
         #endregion
 
         #region Properties
@@ -38,19 +38,15 @@ namespace CsvTextEditor.ViewModels
         #endregion
 
         #region Methods
-        private void OnTypeRegistered(object sender, TypeRegisteredEventArgs e)
-        {
-            if (e.ServiceType != typeof(ICsvTextEditorInstance))
-            {
-                return;
-            }
 
+        private void OnCsvTextEditorProviderInstanceChanged(object sender, EventArgs e)
+        {
             if (_csvTextEditorInstance != null)
             {
                 _csvTextEditorInstance.TextChanged -= OnTextChanged;
             }
 
-            _csvTextEditorInstance = _serviceLocator.ResolveType<ICsvTextEditorInstance>(e.Tag);
+            _csvTextEditorInstance = _csvTextEditorProvider.GetInstance();
             _csvTextEditorInstance.TextChanged += OnTextChanged;
 
             UpdateStatistic();

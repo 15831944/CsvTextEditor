@@ -11,19 +11,18 @@ namespace CsvTextEditor.Services
     using System.Threading.Tasks;
     using System.Windows.Media;
     using Catel;
-    using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.Services;
     using Catel.Threading;
     using Catel.Windows.Controls;
+    using CsvTextEditor.Providers;
+    using MethodTimer;
     using Orc.ProjectManagement;
-    using Orchestra.Markup;
+    using Orc.Squirrel;
     using Orchestra.Services;
     using ProjectManagement;
-    using Orc.Squirrel;
-    using MethodTimer;
     using Settings = CsvTextEditor.Settings;
 
     public class ApplicationInitializationService : ApplicationInitializationServiceBase
@@ -88,6 +87,7 @@ namespace CsvTextEditor.Services
             _serviceLocator.RegisterType<IInitialProjectLocationService, InitialProjectLocationService>();
 
             _serviceLocator.RegisterType<IProjectInitializer, FileProjectInitializer>();
+            _serviceLocator.RegisterType<ICsvTextEditorInstanceProvider, CsvTextEditorInstanceProvider>();
 
             _serviceLocator.RegisterTypeAndInstantiate<ProjectManagementCloseApplicationWatcher>();
         }
